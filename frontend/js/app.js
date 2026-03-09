@@ -88,6 +88,7 @@ function processUploadSuccess(data) {
 
     fileStatus.innerHTML = `✅ <strong>${meta.filename}</strong> Loaded`;
     exportBtn.style.display = 'block';
+    document.getElementById('download-data-btn').style.display = 'block';
 
     updateStats(meta);
     renderCharts(data.charts);
@@ -96,6 +97,26 @@ function processUploadSuccess(data) {
     // Bounce effect on cards
     gsap.to(".stat-card", { scale: 1.05, duration: 0.2, yoyo: true, repeat: 1 });
 }
+
+async function downloadData() {
+    try {
+        const response = await fetch('http://localhost:8000/download');
+        if (!response.ok) throw new Error('Download failed');
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "cleaned_data.xlsx";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (e) {
+        alert("Failed to download data: " + e.message);
+    }
+}
+
 
 function updateStats(meta) {
     animateValue('stat-rows', 0, meta.rows || 0, 1000);

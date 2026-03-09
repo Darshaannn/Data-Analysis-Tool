@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import numpy as np
@@ -116,6 +117,27 @@ async def upload_file(file: UploadFile = File(...)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
+
+@app.get("/download")
+async def download_cleaned_data():
+    global current_df
+    if current_df is None:
+        raise HTTPException(status_code=400, detail="No data available to download.")
+    
+    try:
+        # Create Excel in memory
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            current_df.to_excel(writer, index=False, sheet_name='CleanData')
+        output.seek(0)
+        
+        headers = {
+            'Content-Disposition': 'attachment; filename="cleaned_data.xlsx"'
+        }
+        return StreamingResponse(output, headers=headers, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Download Error: {str(e)}")
+
 
 @app.post("/analyze")
 async def analyze_data(request: AnalysisRequest):
