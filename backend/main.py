@@ -112,8 +112,10 @@ async def upload_file(file: UploadFile = File(...)):
             "status": "success",
             "metadata": metadata,
             "summary": summary_dict,
+            "preview": current_df.head(10).to_dict(orient='records'),
             "charts": chart_data
         })
+
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
@@ -156,6 +158,31 @@ async def analyze_data(request: AnalysisRequest):
         return {"insights": response.text}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"AI Error: {str(e)}")
+
+@app.post("/predict")
+async def predict_trends(request: AnalysisRequest):
+    if not api_key:
+        return {"prediction": "Forecasting requires an API key."}
+    
+    try:
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        prompt = f"""
+        Given this data summary, predict the next 5 data points for the numerical columns.
+        Return ONLY a JSON object with the following structure:
+        {{
+            "columns": ["ColName1", "ColName2"],
+            "historical": [ [list of last 5 values for col1], [list of last 5 values for col2] ],
+            "predicted": [ [list of next 5 values for col1], [list of next 5 values for col2] ]
+        }}
+        Summary: {json.dumps(request.summary)}
+        """
+        response = model.generate_content(prompt)
+        # Attempt to parse json from AI response
+        raw_json = response.text.strip().replace('```json', '').replace('```', '')
+        prediction_data = json.loads(raw_json)
+        return clean_for_json(prediction_data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Predictive Error: {str(e)}")
 
 @app.post("/chat")
 async def data_chat(request: ChatRequest):

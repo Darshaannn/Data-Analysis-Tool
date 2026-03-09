@@ -4,111 +4,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Data Pro | Auto Analyzer</title>
+    <title>AI Data Pro | Transform Spreadsheets into Insights</title>
     <link rel="stylesheet" href="css/styles.css">
-    <!-- Premium Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700;800&display=swap"
-        rel="stylesheet">
-    <!-- Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 </head>
 
 <body>
-    <div class="app-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar glass-effect">
-            <div class="brand">
-                <div class="logo-icon"></div>
-                <span class="brand-name">AI Data Pro</span>
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- LANDING PAGE VIEW -->
+    <div id="landing-view" class="view">
+        <header class="hero">
+            <h1 class="reveal">Turn Your Excel Into <br><span style="color: var(--cyan)">AI Insights</span> Instantly
+            </h1>
+            <p class="reveal">Upload any spreadsheet and get automated data cleaning, analysis, visualizations, and
+                predictive insights in seconds.</p>
+            <div class="cta-group reveal">
+                <button class="btn-primary" onclick="switchToApp()">Try AI Data Pro</button>
+                <a href="#how-it-works" class="btn-secondary">View Demo</a>
+            </div>
+        </header>
+
+        <!-- How It Works (Pipeline) -->
+        <section id="how-it-works" class="features-section">
+            <h2 style="text-align: center; margin-bottom: 4rem; font-size: 3rem;">The AI Pipeline</h2>
+            <div class="feature-grid">
+                <div class="pipeline-connector"></div>
+                <div class="glass-card reveal">
+
+                    <h3>📁 Upload</h3>
+                    <p>Drop your raw .xlsx or .csv files into our secure engine.</p>
+                </div>
+                <div class="glass-card reveal">
+                    <h3>✨ Auto-Clean</h3>
+                    <p>AI identifies duplicates, trims whitespace, and fixes formats.</p>
+                </div>
+                <div class="glass-card reveal">
+                    <h3>🧠 Analyze</h3>
+                    <p>Get instant statistical summaries and hidden trend detection.</p>
+                </div>
+                <div class="glass-card reveal">
+                    <h3>📈 Visualize</h3>
+                    <p>Interactive charts generated automatically for your specific data types.</p>
+                </div>
+                <div class="glass-card reveal">
+                    <h3>🔮 Predict</h3>
+                    <p>AI time-series models project your data into the future with precision.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="features-section">
+            <h2 style="text-align: center; margin-bottom: 4rem; font-size: 2.5rem;">Built for Modern Teams</h2>
+            <div class="feature-grid">
+                <div class="glass-card reveal">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">🛡️</div>
+                    <h4>Private by Design</h4>
+                    <p>Your data is processed in-memory and never stored on our servers.</p>
+                </div>
+                <div class="glass-card reveal">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
+                    <h4>Zero Configuration</h4>
+                    <p>No schemas to define. No SQL to write. Just results.</p>
+                </div>
+                <div class="glass-card reveal">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">🎨</div>
+                    <h4>Premium Reports</h4>
+                    <p>Export pixel-perfect PDF summaries and organized Excel datasets.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Footer -->
+        <section class="hero"
+            style="height: 60vh; background: radial-gradient(circle at bottom, rgba(108, 99, 255, 0.1) 0%, transparent 100%);">
+            <h2 class="reveal" style="font-size: 3rem; margin-bottom: 2rem;">Ready to Unlock Your Data?</h2>
+            <button class="btn-primary" onclick="switchToApp()">Get Started for Free</button>
+        </section>
+
+        <footer
+            style="padding: 4rem 2rem; border-top: 1px solid var(--glass-border); text-align: center; color: var(--text-muted);">
+            <p>© 2026 AI Data Pro. Built with Antigravity Architecture.</p>
+        </footer>
+
+    </div>
+
+    <!-- APP SHELL VIEW -->
+    <div id="app-shell" class="view">
+        <aside class="sidebar">
+            <div class="brand" style="margin-bottom: 3rem; display: flex; align-items: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background: var(--primary); border-radius: 8px;"></div>
+                <h2 style="font-size: 1.4rem;">AI Data Pro</h2>
             </div>
 
-            <nav class="nav-links">
-                <div class="nav-item active" data-target="dashboard-view">
-                    <span class="nav-icon">📊</span> Dashboard
+            <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div class="nav-item active"
+                    style="padding: 1rem; border-radius: 12px; background: rgba(108, 99, 255, 0.1); color: var(--primary); cursor: pointer;">
+                    Dashboard
                 </div>
-                <div class="nav-item" data-target="chat-view">
-                    <span class="nav-icon">💬</span> Data Chat
+                <div class="nav-item" style="padding: 1rem; color: var(--text-muted); cursor: pointer;">
+                    AI Data Chat
+                </div>
+                <div class="nav-item" style="padding: 1rem; color: var(--text-muted); cursor: pointer;">
+                    Predictions
                 </div>
             </nav>
 
-            <div class="sidebar-spacer"></div>
+            <div style="flex: 1;"></div>
 
-            <div class="upload-widget glass-card">
-                <h3>New Dataset</h3>
-                <div id="drop-zone">
-                    <div class="upload-icon">📁</div>
-                    <p>Drop Excel or CSV</p>
+            <div class="glass-card" style="padding: 1.5rem; border-radius: 20px;">
+                <h4
+                    style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem;">
+                    Importer</h4>
+                <div id="drop-zone"
+                    style="border: 2px dashed var(--glass-border); padding: 1rem; text-align: center; border-radius: 12px; cursor: pointer;">
+                    <span style="font-size: 1.5rem;">📁</span>
+                    <p style="font-size: 0.75rem;">Drop File</p>
                     <input type="file" id="file-input" hidden>
-                    <button class="btn-action" onclick="document.getElementById('file-input').click()">Select
-                        File</button>
                 </div>
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <header class="top-bar">
-                <div id="file-status" class="file-status">No data loaded</div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn-primary" id="download-data-btn" style="display: none; background: var(--accent);"
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+                <div>
+                    <h1 id="file-status" style="font-size: 1.5rem; -webkit-text-fill-color: initial; color: #fff;">
+                        Waiting for Data...</h1>
+                    <p id="file-meta" style="color: var(--text-muted); font-size: 0.9rem;">No dataset active</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button id="download-data-btn" class="btn-secondary"
+                        style="display: none; padding: 0.7rem 1.2rem; border-radius: 12px;"
                         onclick="downloadData()">Download Clean Data</button>
-                    <button class="btn-primary" id="export-btn" style="display: none;" onclick="window.print()">Export
-                        Report</button>
+                    <button id="export-btn" class="btn-primary"
+                        style="display: none; padding: 0.7rem 1.2rem; border-radius: 12px;"
+                        onclick="window.print()">Export Report</button>
                 </div>
             </header>
 
-            <div class="scroll-container">
-                <!-- Dashboard View -->
-                <div id="dashboard-view" class="view active">
-                    <section class="stat-cards-grid">
-                        <div class="stat-card glass-card">
-                            <label>Total Rows</label>
-                            <div id="stat-rows" class="stat-value">0</div>
+            <div id="dashboard-content" class="sub-view">
+                <!-- Stats Grid -->
+                <div class="grid-stage" style="margin-bottom: 3rem;">
+                    <div class="glass-card stat-widget reveal">
+                        <label style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Total
+                            Rows</label>
+                        <div id="stat-rows"
+                            style="font-size: 2.2rem; font-weight: 800; font-family: 'Outfit'; color: var(--cyan);">0
                         </div>
-                        <div class="stat-card glass-card">
-                            <label>Columns</label>
-                            <div id="stat-cols" class="stat-value">0</div>
-                        </div>
-                        <div class="stat-card glass-card">
-                            <label>Duplicates Removed</label>
-                            <div id="stat-dupes" class="stat-value">0</div>
-                        </div>
-                    </section>
-
-                    <section class="content-section">
-                        <div class="glass-card full-width">
-                            <h2>AI Summary Insights</h2>
-                            <div id="ai-insights" class="insight-content">
-                                <div class="empty-state">Upload a dataset to generate insights...</div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="content-section">
-                        <h2>Visual Analysis</h2>
-                        <div id="charts-container" class="charts-grid">
-                            <!-- ECharts will be injected here -->
-                        </div>
-                    </section>
-                </div>
-
-                <!-- Chat View -->
-                <div id="chat-view" class="view">
-                    <div class="chat-container glass-card">
-                        <div id="chat-messages" class="message-area">
-                            <div class="system-message">Ask specific questions about your data...</div>
-                        </div>
-                        <div class="chat-input-wrapper">
-                            <input type="text" id="chat-input"
-                                placeholder="e.g. What is the highest value in column X?">
-                            <button class="btn-icon" onclick="sendMessage()">➔</button>
+                    </div>
+                    <div class="glass-card stat-widget reveal">
+                        <label
+                            style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Columns</label>
+                        <div id="stat-cols"
+                            style="font-size: 2.2rem; font-weight: 800; font-family: 'Outfit'; color: var(--pink);">0
                         </div>
                     </div>
                 </div>
+
+                <!-- Data Snapshot Table -->
+                <div class="grid-stage" style="margin-bottom: 3rem;">
+                    <div class="glass-card reveal" style="grid-column: span 12;">
+                        <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem;">📄 Data Snapshot</h2>
+                        <div style="overflow-x: auto;">
+                            <table id="data-preview" style="width:100%; border-collapse: collapse; font-size: 0.85rem;">
+                                <!-- Header and Rows injected by JS -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="charts-container" class="grid-stage" style="grid-column: span 12;">
+                    <!-- ECharts injected here -->
+                </div>
+
             </div>
+
+            <!-- Chat View -->
+            <div id="chat-content" class="sub-view"
+                style="display: none; height: calc(100vh - 200px); flex-direction: column;">
+                <div class="glass-card"
+                    style="flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0;">
+                    <div id="chat-messages"
+                        style="flex: 1; overflow-y: auto; padding: 2rem; display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="ai-bubble">Hello! I'm your AI Data Assistant. Once you've uploaded a dataset, you
+                            can ask me anything about it.</div>
+                    </div>
+                    <div style="padding: 1.5rem; border-top: 1px solid var(--glass-border); display: flex; gap: 1rem;">
+                        <input type="text" id="chat-input" placeholder="Ask AI about your data..."
+                            style="flex: 1; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 10px; padding: 1rem; color: #fff; outline: none;">
+                        <button class="btn-primary" style="padding: 0 1.5rem;" onclick="sendChatMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Predictions View -->
+            <div id="predictions-content" class="sub-view" style="display: none;">
+                <div class="glass-card reveal" style="margin-bottom: 3rem;">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem;">🔮 AI Predictive Forecasting</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">Using advanced time-series models to
+                        project future trends based on your historical data.</p>
+                    <div id="prediction-container" class="grid-stage">
+                        <!-- Loaded via JS -->
+                    </div>
+                </div>
+
+                <div class="glass-card reveal">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem;">🧠 AI Analyst insights</h2>
+                    <div id="ai-insights" style="color: var(--text-main); font-size: 1rem; line-height: 1.7;">
+                        Waiting for analysis...
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
 
