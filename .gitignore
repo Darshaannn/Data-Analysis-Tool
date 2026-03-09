@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Data
+*.csv
+*.xlsx
+*.xls
+
+# Frontend
+.DS_Store
+node_modules/
